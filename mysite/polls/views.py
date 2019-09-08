@@ -38,18 +38,14 @@ def getDistinctValue(request):
 
 def getTuitionForTwoLocation(request):
     if request.method=='POST':
-        data = {"data": []}
+        data = {'location1':[],'location2':[]}
         qs = Ranking.objects.filter(Q(location=request.POST.get('location1'), yearRange=request.POST.get("yearRange")) |
                                     Q(location=request.POST.get('location2'), yearRange=request.POST.get("yearRange"))
                                     )
         for one_rank in qs:
-            data['data'].append({
-                "id": one_rank.id,
-                "year": one_rank.yearRange,
-                "location": one_rank.location,
-                "type": one_rank.studentType,
+            data['location1'].append(
                 "tuition": one_rank.tuitionFee
-                })
+                )
         return HttpResponse(status=200, content=json.dumps(data), content_type='application/json')
     else:
         return HttpResponse(status=405)

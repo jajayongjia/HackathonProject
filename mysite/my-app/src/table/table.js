@@ -3,11 +3,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import './table.css';
-import { Table, Divider, Tag, Button } from 'antd';
+import { Table, Divider, Tag, Button , Spin} from 'antd';
 
 
 class TableComponent extends React.Component {
   state = {
+    loading: true,
     data: []
   };
 
@@ -24,6 +25,7 @@ class TableComponent extends React.Component {
                 return {
                   ...state,
                   data: data.data,
+                  loading: false,
                   locationFilters: this.getLocationFilter(data.data),
                   typeFilters: this.getTypeFilter(data.data)
                 }
@@ -72,7 +74,7 @@ class TableComponent extends React.Component {
         dataIndex: 'type',
         key: 'type',
         filters: this.state.typeFilters,
-        onFilter: (value, record) => record.location.includes(value)
+        onFilter: (value, record) => record.type.includes(value)
       },
       {
         title: 'tuition',
@@ -82,9 +84,15 @@ class TableComponent extends React.Component {
         sortDirections: ['descend', 'ascend'],
       }
     ];
-    return (
-      <Table columns={columns} dataSource={this.state.data} onChange={this.handleChange} rowKey={record => record.id} />
-    );
+    if (this.state.loading) {
+      return (
+        <Spin size="large" />
+      )
+    } else {
+      return (
+        <Table columns={columns} dataSource={this.state.data} onChange={this.handleChange} rowKey={record => record.id} />
+      );
+    }
   }
 }
 

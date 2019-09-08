@@ -17,3 +17,20 @@ def get_all_data(request):
         return HttpResponse(status=200, content=json.dumps(data), content_type='application/json')
     else:
         return HttpResponse(status=405)
+
+def getDistinctYearRange(request):
+    if request.method=='GET':
+        data = {"data": []}
+        qs = Ranking.objects.order_by().values('yearRange').distinct()
+        for one_rank in qs:
+            data['data'].append({
+                "id": one_rank.id,
+                "year": one_rank.yearRange,
+                "location": one_rank.location,
+                "type": one_rank.studentType,
+                "tuition": one_rank.tuitionFee
+                })
+        return HttpResponse(status=200, content=json.dumps(data), content_type='application/json')
+    else:
+        return HttpResponse(status=405)
+        

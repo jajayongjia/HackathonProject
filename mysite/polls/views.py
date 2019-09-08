@@ -33,7 +33,7 @@ def getDistinctValue(request):
         return HttpResponse(status=200, content=json.dumps(data), content_type='application/json')
     else:
         return HttpResponse(status=405)
-
+@ensure_csrf_cookie
 def getTuitionForTwoLocation(request):
     if request.method=='POST':
         data = {"data": []}

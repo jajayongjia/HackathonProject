@@ -28,7 +28,7 @@ def getDistinctValue(request):
             data['yearRange'].append(i['yearRange'])
         for j in location:
             data['location'].append(j['location'])
-        for j in location:
+        for j in studentType:
             data['studentType'].append(j['studentType'])
         return HttpResponse(status=200, content=json.dumps(data), content_type='application/json')
     else:

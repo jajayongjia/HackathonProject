@@ -9,10 +9,10 @@ def get_all_data(request):
         for one_rank in qs:
             data['data'].append({
                 "id": one_rank.id,
-                "yearRange": one_rank.yearRange,
-                "localtion": one_rank.location,
-                "studentType": one_rank.studentType,
-                "tuitionFee": one_rank.tuitionFee
+                "year": one_rank.yearRange,
+                "location": one_rank.location,
+                "type": one_rank.studentType,
+                "tuition": one_rank.tuitionFee
                 })
         return HttpResponse(status=200, content=json.dumps(data), content_type='application/json')
     else:

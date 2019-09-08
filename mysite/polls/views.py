@@ -23,7 +23,7 @@ def getDistinctValue(request):
         data = {"yearRange": [], 'location':[]}
         yearRange = Ranking.objects.distinct().order_by().values('yearRange')
         location = Ranking.objects.distinct().order_by().values('location')
-         for i in yearRange:
+        for i in yearRange:
             data['yearRange'].append(i['yearRange'])
         for j in location:
             data['location'].append(j['location'])
@@ -34,9 +34,11 @@ def getDistinctValue(request):
 def getTuitionForTwoLocation(request):
     if request.method=='GET':
         data = {"data": []}
+
         qs = Ranking.objects.filter(Q(location=request.GET('location1'), yearRange=request.GET("yearRange")) |
                                     Q(location=request.GET('location2'), yearRange=request.GET("yearRange"))
                                     )
+
         for one_rank in qs:
             data['data'].append({
                 "id": one_rank.id,
@@ -48,4 +50,3 @@ def getTuitionForTwoLocation(request):
         return HttpResponse(status=200, content=json.dumps(data), content_type='application/json')
     else:
         return HttpResponse(status=405)
-

@@ -57,14 +57,14 @@ class TableComponent extends React.Component {
       {
         title: 'Year',
         dataIndex: 'year',
-        key: 'year',
+        // key: 'year',
         sorter: (a, b) => a.year > b.year,
         sortDirections: ['descend', 'ascend'],
       },
       {
         title: 'Location',
         dataIndex: 'location',
-        key: 'location',
+        // key: 'location',
         align: 'center',
         filters: this.state.locationFilters,
         onFilter: (value, record) => record.location.includes(value)
@@ -79,7 +79,7 @@ class TableComponent extends React.Component {
       {
         title: 'tuition',
         dataIndex: 'tuition',
-        key: 'tuition',
+        // key: 'tuition',
         sorter: (a, b) => parseInt(a.tuition) - parseInt(b.tuition) ,
         sortDirections: ['descend', 'ascend'],
       }

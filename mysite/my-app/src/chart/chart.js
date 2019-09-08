@@ -193,7 +193,7 @@ class ChartComponent extends React.Component {
       <div>
         <div style={{ 'marginButton': 10, 'marginLeft': 'auto', 'marginRight': 'auto' }}>
           <span style={{ 'marginRight': 5 }}>
-            <Text>Location: </Text>
+            <Text>Location1: </Text>
             <Select style={{ width: 200 }} onChange={(v) => this.handleChangeLocation1(v)}>
               {this.state.locations.map(value => {
                 return <Option value={value}>{value}</Option>
@@ -201,7 +201,7 @@ class ChartComponent extends React.Component {
             </Select>
           </span>
           <span style={{ 'marginLeft': 5 }}>
-            <Text>Location: </Text>
+            <Text>Location2: </Text>
             <Select style={{ width: 200 }} onChange={(v)=>this.handleChangeLocation2(v)}>
               {this.state.locations.map(value => {
                 if (value != this.state.select2) {

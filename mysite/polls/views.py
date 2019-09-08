@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from  .models import Ranking
 import json
 from django.db.models import Q
+
 def get_all_data(request):
     if request.method == 'GET':
         data = {"data": []}
@@ -34,6 +35,7 @@ def getDistinctValue(request):
     else:
         return HttpResponse(status=405)
 
+
 def getTuitionForTwoLocation(request):
     if request.method=='POST':
         data = {"data": []}
@@ -51,4 +53,3 @@ def getTuitionForTwoLocation(request):
         return HttpResponse(status=200, content=json.dumps(data), content_type='application/json')
     else:
         return HttpResponse(status=405)
-

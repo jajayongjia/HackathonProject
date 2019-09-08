@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from  .models import Ranking
 import json
+from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 def get_all_data(request):
     if request.method == 'GET':

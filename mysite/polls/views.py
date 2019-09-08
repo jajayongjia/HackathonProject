@@ -20,13 +20,16 @@ def get_all_data(request):
 
 def getDistinctValue(request):
     if request.method=='GET':
-        data = {"yearRange": [], 'location':[]}
+        data = {"yearRange": [], 'location':[],'studentType':[]}
         yearRange = Ranking.objects.distinct().order_by().values('yearRange')
         location = Ranking.objects.distinct().order_by().values('location')
-         for i in yearRange:
+        studentType = Ranking.objects.distinct().order_by().values('studentType')
+        for i in yearRange:
             data['yearRange'].append(i['yearRange'])
         for j in location:
             data['location'].append(j['location'])
+        for j in location:
+            data['studentType'].append(j['studentType'])
         return HttpResponse(status=200, content=json.dumps(data), content_type='application/json')
     else:
         return HttpResponse(status=405)

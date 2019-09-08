@@ -3,91 +3,89 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import './table.css';
-import { Table, Divider, Tag } from 'antd';
+import { Table, Divider, Tag, Button } from 'antd';
 
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-  },
-];
 
-const data = [];
-for (let i = 0; i < 46; i++) {
-  data.push({
-    key: i,
-    name: `Edward King ${i}`,
-    age: 32,
-    address: `London, Park Lane no. ${i}`,
-  });
-}
-
-class TableData extends React.Component {
+class TableComponent extends React.Component {
   state = {
-    selectedRowKeys: [], // Check here to configure the default column
+    data: []
   };
 
-  onSelectChange = selectedRowKeys => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.setState({ selectedRowKeys });
+  componentDidMount(){
+    fetch('http://localhost:8000/api/data').then(
+      (response) =>  {
+        if (response.status !== 200) {
+          console.log("not success", response);
+          return;
+        } else {
+          response.json().then(
+            (data) => {
+              this.setState( (state) => {
+                return {
+                  ...state,
+                  data: data.data,
+                  locationFilters: this.getLocationFilter(data.data),
+                  typeFilters: this.getTypeFilter(data.data)
+                }
+              })
+            })
+        };
+      }).catch(
+        err => {
+         console.log('Fetch Error :-S', err);
+        }
+      );
+  }
+
+  handleChange = (pagination, filters, sorter) => {
+    console.log('Various parameters', pagination, filters, sorter);
   };
+
+  getLocationFilter = (data) => {
+    // from https://codeburst.io/javascript-array-distinct-5edc93501dc4
+    return [... new Set(data.map( x => x.location))].map( x=> ({text: x, value: x}))
+  }
+  getTypeFilter = (data) => {
+    // from https://codeburst.io/javascript-array-distinct-5edc93501dc4
+    return [... new Set(data.map( x => x.type))].map( x=> ({text: x, value: x}))
+  }
 
   render() {
-    const { selectedRowKeys } = this.state;
-    const rowSelection = {
-      selectedRowKeys,
-      onChange: this.onSelectChange,
-      hideDefaultSelections: true,
-      selections: [
-        {
-          key: 'all-data',
-          text: 'Select All Data',
-          onSelect: () => {
-            this.setState({
-              selectedRowKeys: [...Array(46).keys()], // 0...45
-            });
-          },
-        },
-        {
-          key: 'odd',
-          text: 'Select Odd Row',
-          onSelect: changableRowKeys => {
-            let newSelectedRowKeys = [];
-            newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-              if (index % 2 !== 0) {
-                return false;
-              }
-              return true;
-            });
-            this.setState({ selectedRowKeys: newSelectedRowKeys });
-          },
-        },
-        {
-          key: 'even',
-          text: 'Select Even Row',
-          onSelect: changableRowKeys => {
-            let newSelectedRowKeys = [];
-            newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-              if (index % 2 !== 0) {
-                return true;
-              }
-              return false;
-            });
-            this.setState({ selectedRowKeys: newSelectedRowKeys });
-          },
-        },
-      ],
-    };
-    return <Table rowSelection={rowSelection} columns={columns} dataSource={data} />;
+    const columns = [
+      {
+        title: 'Year',
+        dataIndex: 'year',
+        key: 'year',
+        sorter: (a, b) => a.year > b.year,
+        sortDirections: ['descend', 'ascend'],
+      },
+      {
+        title: 'Location',
+        dataIndex: 'location',
+        key: 'location',
+        align: 'center',
+        filters: this.state.locationFilters,
+        onFilter: (value, record) => record.location.includes(value)
+      },
+      {
+        title: 'type',
+        dataIndex: 'type',
+        key: 'type',
+        filters: this.state.typeFilters,
+        onFilter: (value, record) => record.location.includes(value)
+      },
+      {
+        title: 'tuition',
+        dataIndex: 'tuition',
+        key: 'tuition',
+        sorter: (a, b) => parseInt(a.tuition) - parseInt(b.tuition) ,
+        sortDirections: ['descend', 'ascend'],
+      }
+    ];
+    return (
+      <Table columns={columns} dataSource={this.state.data} onChange={this.handleChange} rowKey={record => record.id} />
+    );
   }
 }
 
-export default TableData;
+export default TableComponent;

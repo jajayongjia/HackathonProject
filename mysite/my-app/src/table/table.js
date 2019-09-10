@@ -3,11 +3,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import './table.css';
-import { Table, Divider, Tag, Button } from 'antd';
+import { Table, Divider, Tag, Button , Spin} from 'antd';
 
 
 class TableComponent extends React.Component {
   state = {
+    loading: true,
     data: []
   };
 
@@ -24,6 +25,7 @@ class TableComponent extends React.Component {
                 return {
                   ...state,
                   data: data.data,
+                  loading: false,
                   locationFilters: this.getLocationFilter(data.data),
                   typeFilters: this.getTypeFilter(data.data)
                 }
@@ -55,14 +57,14 @@ class TableComponent extends React.Component {
       {
         title: 'Year',
         dataIndex: 'year',
-        key: 'year',
+        // key: 'year',
         sorter: (a, b) => a.year > b.year,
         sortDirections: ['descend', 'ascend'],
       },
       {
         title: 'Location',
         dataIndex: 'location',
-        key: 'location',
+        // key: 'location',
         align: 'center',
         filters: this.state.locationFilters,
         onFilter: (value, record) => record.location.includes(value)
@@ -72,19 +74,25 @@ class TableComponent extends React.Component {
         dataIndex: 'type',
         key: 'type',
         filters: this.state.typeFilters,
-        onFilter: (value, record) => record.location.includes(value)
+        onFilter: (value, record) => record.type.includes(value)
       },
       {
         title: 'tuition',
         dataIndex: 'tuition',
-        key: 'tuition',
+        // key: 'tuition',
         sorter: (a, b) => parseInt(a.tuition) - parseInt(b.tuition) ,
         sortDirections: ['descend', 'ascend'],
       }
     ];
-    return (
-      <Table columns={columns} dataSource={this.state.data} onChange={this.handleChange} rowKey={record => record.id} />
-    );
+    if (this.state.loading) {
+      return (
+        <Spin size="large" />
+      )
+    } else {
+      return (
+        <Table columns={columns} dataSource={this.state.data} onChange={this.handleChange} rowKey={record => record.id} />
+      );
+    }
   }
 }
 
